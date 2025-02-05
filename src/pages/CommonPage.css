@@ -1,0 +1,22 @@
+/* Required Slick Carousel styles */
+.slick-slider {
+  width: 100%;
+  max-width: 400px; /* Adjust based on your design */
+  margin: auto;
+}
+
+.slick-slide {
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+}
+
+.slick-dots {
+  bottom: -30px;
+}
+
+.slick-prev,
+.slick-next {
+  color: black !important;
+  z-index: 1000;
+}
