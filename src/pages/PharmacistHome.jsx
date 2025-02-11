@@ -143,12 +143,12 @@ const PharmacistHome = () => {
   return (
     <>
       <Navbars role="pharmacist" onProfileOpen={onProfileOpen} />
-      <Box>
+      {/* <Box>
         <ScrollingText
           position="absolute"
           top="100px"
         />
-      </Box>
+      </Box> */}
       <Box p={6}>
         <Box mt={40}>
           <Text

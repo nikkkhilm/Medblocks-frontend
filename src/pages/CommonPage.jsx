@@ -106,14 +106,15 @@ const CommonPage = () => {
   };
 
   return (
-    <Container maxW="100%" backgroundColor={"red"} centerContent>
+    <Container maxW="100%" backgroundColor={"black"} centerContent>
       <Box
         display="flex"
         justifyContent="center"
         bg="white"
         w="100%"
         p={2}
-        m="40px 0 15px 0"
+        // m="40px 0 15px 0"
+        
         textAlign="center"
         backgroundColor="black"
       >

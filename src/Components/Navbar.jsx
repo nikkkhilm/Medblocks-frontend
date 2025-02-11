@@ -1,48 +1,41 @@
 import React from "react";
-import { Box, Flex, Text, Button, Spacer, Image } from "@chakra-ui/react";
-import logo from "../assets/logo.png"; // import your logo
-import ScrollingText from "./ScrollingText";
+import { Box, Flex, Text, Image, Spacer } from "@chakra-ui/react";
+import logo from "../assets/logo.png"; // Import your logo
 
 const Navbar = () => {
   return (
-      <Box
-        bg="#4267B2"
-        color="white"
-        position="fixed"
-        width="100%"
-        zIndex="999"
-        px={20}
-        py={6}
-      >
-        <Flex alignItems="center" ml={126}>
-          {/* Logo */}
-          <Flex alignItems="center">
-            <Image src={logo} alt="Logo" boxSize="60px" borderRadius={50} />
-            <Text fontSize="3xl" fontWeight="medium" ml={4}>
-              BLOCKMEDS
-            </Text>
-          </Flex>
-
-          <Spacer />
-
-          {/* Links */}
-          <Flex gap={36} mr={-800}>
-            {["HOME", "ABOUT US"].map((item, index) => (
-              <button
-                key={index}
-                fontSize="lg"
-                fontWeight="bold"
-                textTransform="capitalize"
-              >
-                {item}
-              </button>
-            ))}
-          </Flex>
-
-          <Spacer />
+    <Box
+      bg="#4267B2"
+      color="white"
+      position="fixed"
+      top="0"
+      width="100%"
+      zIndex="999"
+      px={16}
+      py={5}
+      boxShadow="md"
+    >
+      <Flex alignItems="center">
+        {/* Logo Section */}
+        <Flex alignItems="center">
+          <Image src={logo} alt="Logo" boxSize="50px" borderRadius="full" />
+          <Text fontSize="2xl" fontWeight="bold" ml={3}>
+            BLOCKMEDS
+          </Text>
         </Flex>
-      </Box>
-    
+
+        <Spacer />
+
+        {/* Navigation Links */}
+        <Flex gap={12}>
+          {["HOME", "ABOUT US"].map((item, index) => (
+            <Text key={index} fontSize="lg" fontWeight="bold" cursor="pointer">
+              {item}
+            </Text>
+          ))}
+        </Flex>
+      </Flex>
+    </Box>
   );
 };
 

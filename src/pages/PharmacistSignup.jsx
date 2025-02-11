@@ -117,38 +117,46 @@ const PharmacistSignup = () => {
   return (
     <VStack spacing="5px">
       <FormControl id="firstName" isRequired>
-        <FormLabel>First Name</FormLabel>
+        <FormLabel fontSize={"lg"}>First Name</FormLabel>
         <Input
           placeholder="Enter Your First Name"
           value={firstName}
           onChange={(e) => setFirstName(e.target.value)}
+          fontSize={"lg"}
+          size={"lg"}
         />
       </FormControl>
 
       <FormControl id="lastName" isRequired>
-        <FormLabel>Last Name</FormLabel>
+        <FormLabel fontSize={"lg"}>Last Name</FormLabel>
         <Input
           placeholder="Enter Your Last Name"
           value={lastName}
           onChange={(e) => setLastName(e.target.value)}
+          fontSize={"lg"}
+          size={"lg"}
         />
       </FormControl>
 
       <FormControl id="dateOfBirth" isRequired>
-        <FormLabel>Date of Birth</FormLabel>
+        <FormLabel fontSize={"lg"}>Date of Birth</FormLabel>
         <Input
           type="date"
           value={dateOfBirth}
           onChange={(e) => setDateOfBirth(e.target.value)}
+          fontSize={"lg"}
+          size={"lg"}
         />
       </FormControl>
 
       <FormControl id="gender" isRequired>
-        <FormLabel>Gender</FormLabel>
+        <FormLabel fontSize={"lg"}>Gender</FormLabel>
         <Select
           placeholder="Select Gender"
           value={gender}
           onChange={(e) => setGender(e.target.value)}
+          fontSize={"lg"}
+          size={"lg"}
         >
           <option value="male">Male</option>
           <option value="female">Female</option>
@@ -157,60 +165,72 @@ const PharmacistSignup = () => {
       </FormControl>
 
       <FormControl id="contactNumber" isRequired>
-        <FormLabel>Contact Number</FormLabel>
+        <FormLabel fontSize={"lg"}>Contact Number</FormLabel>
         <Input
           type="tel"
           placeholder="Enter Your Contact Number"
           value={contactNumber}
           onChange={(e) => setContactNumber(e.target.value)}
+          fontSize={"lg"}
+          size={"lg"}
         />
       </FormControl>
 
       <FormControl id="email" isRequired>
-        <FormLabel>Email</FormLabel>
+        <FormLabel fontSize={"lg"}>Email</FormLabel>
         <Input
           type="email"
           placeholder="Enter Your Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          fontSize={"lg"}
+          size={"lg"}
         />
       </FormControl>
 
       <FormControl id="password" isRequired>
-        <FormLabel>Password</FormLabel>
+        <FormLabel fontSize={"lg"}>Password</FormLabel>
         <Input
           type="password"
           placeholder="Enter Your Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          fontSize={"lg"}
+          size={"lg"}
         />
       </FormControl>
 
       <FormControl id="confirmPassword" isRequired>
-        <FormLabel>Confirm Password</FormLabel>
+        <FormLabel fontSize={"lg"}>Confirm Password</FormLabel>
         <Input
           type="password"
           placeholder="Confirm Your Password"
           value={confirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}
+          fontSize={"lg"}
+          size={"lg"}
         />
       </FormControl>
 
       <FormControl id="pharmacyLicenseId" isRequired>
-        <FormLabel>Pharmacy License ID</FormLabel>
+        <FormLabel fontSize={"lg"}>Pharmacy License ID</FormLabel>
         <Input
           placeholder="Enter Your Pharmacy License ID"
           value={pharmacyLicenseId}
           onChange={(e) => setPharmacyLicenseId(e.target.value)}
+          fontSize={"lg"}
+          size={"lg"}
         />
       </FormControl>
 
       <FormControl id="ethereumWalletAddress" isRequired>
-        <FormLabel>Ethereum Wallet Address</FormLabel>
+        <FormLabel fontSize={"lg"}>Ethereum Wallet Address</FormLabel>
         <Input
           placeholder="Enter Your Ethereum Wallet Address"
           value={ethereumWalletAddress}
           onChange={(e) => setEthereumWalletAddress(e.target.value)}
+          fontSize={"lg"}
+          size={"lg"}
         />
       </FormControl>
 
@@ -220,6 +240,8 @@ const PharmacistSignup = () => {
         style={{ marginTop: 15 }}
         onClick={submitHandler}
         isLoading={loading}
+        fontSize={"lg"}
+        size={"lg"}
       >
         Signup
       </Button>

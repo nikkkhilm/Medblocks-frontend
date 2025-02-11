@@ -2,77 +2,48 @@ import React from "react";
 import { Box, Text } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
 
-const ScrollingText = ({ position, top, left, right, bottom, width }) => {
-  // Define keyframes for scrolling
-  const scrollAnimation = keyframes`
-    0% {
-      transform: translateX(100%);
-    }
-    100% {
-      transform: translateX(-100%);
-    }
-  `;
+// Define keyframes for seamless scrolling
+const scrollAnimation = keyframes`
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+`;
 
+const ScrollingText = ({ position, top, left, right, bottom, width }) => {
   return (
     <Box
-      position={position || "relative"} // Default to relative if no position passed
+      position={position || "relative"}
       top={top}
       left={left}
       right={right}
       bottom={bottom}
-      width={width || "100vw"} // Full width by default
-      height="75px"
+      width={width || "100vw"}
+      height="50px"
       bg="black"
       color="white"
-      p="10px 0"
+      display="flex"
+      alignItems="center"
       overflow="hidden"
+      whiteSpace="nowrap"
     >
-      {/* Box that holds the text */}
+      {/* Wrapper for seamless scrolling effect */}
       <Box
         display="flex"
-        width="100%" // Make the width dynamic based on content
-        animation={`${scrollAnimation} 15s linear infinite`} // Apply animation for continuous scroll
+        gap="40px"
+        minWidth="200%"
+        animation={`${scrollAnimation} 15s linear infinite`}
       >
-        {/* The content that will scroll */}
-        <Box display="flex">
-          {/* Repeat the text for seamless scrolling */}
-          <Text
-            fontSize="2xl"
-            fontWeight="bold"
-            whiteSpace="nowrap"
-            flexShrink={0} // Prevent shrinking
-          >
-            BLOCKMEDS - Your trusted platform for medication tracking.
-          </Text>
-          <Text
-            fontSize="2xl"
-            fontWeight="bold"
-            whiteSpace="nowrap"
-            flexShrink={0} // Prevent shrinking
-          >
-            BLOCKMEDS - Your trusted platform for medication tracking.
-          </Text>
-        </Box>
-
-        {/* Duplicate the text again for seamless scrolling */}
-        <Box display="flex">
-          <Text
-            fontSize="2xl"
-            fontWeight="bold"
-            whiteSpace="nowrap"
-            flexShrink={0} // Prevent shrinking
-          >
-            BLOCKMEDS - Your trusted platform for medication tracking.
-          </Text>
-          <Text
-            fontSize="2xl"
-            fontWeight="bold"
-            whiteSpace="nowrap"
-            flexShrink={0} // Prevent shrinking
-          >
-            BLOCKMEDS - Your trusted platform for medication tracking.
-          </Text>
-        </Box>
+        {/* Repeat the text multiple times to avoid gaps */}
+        {Array(3)
+          .fill("BLOCKMEDS - Your trusted platform for medication tracking.")
+          .map((text, index) => (
+            <Text key={index} fontSize="xl" fontWeight="bold">
+              {text}
+            </Text>
+          ))}
       </Box>
     </Box>
   );
