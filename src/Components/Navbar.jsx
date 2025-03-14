@@ -5,7 +5,7 @@ import logo from "../assets/logo.png"; // Import your logo
 const Navbar = () => {
   return (
     <Box
-      bg="#4267B2"
+      bg=""
       color="white"
       position="fixed"
       top="0"

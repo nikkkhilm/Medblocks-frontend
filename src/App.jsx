@@ -14,7 +14,6 @@ import RegulatoryHome from "./pages/RegulatoryHome"; // Import the RegulatoryHom
 function App() {
   return (
     <Router>
-      {/* <Navbar/> */}
       <Routes>
         <Route path="/" element={<LandingPage />} />
         {/* <Route path="/common" element={<CommonPage />} /> */}
