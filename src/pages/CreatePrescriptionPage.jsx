@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-// import { useToast } from "@chakra-ui/react";
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Text,
@@ -18,12 +17,135 @@ import {
   useDisclosure,
   Center,
   Checkbox,
+  useToast
 } from "@chakra-ui/react";
 import axios from "axios";
 
+// DiagnosisSearch component
+const DiagnosisSearch = ({ onSelect }) => {
+  const [query, setQuery] = useState("");
+  const [results, setResults] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (!query) {
+      setResults([]);
+      return;
+    }
+
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const token = JSON.parse(localStorage.getItem("doctorInfo"));
+        if (!token) throw new Error("No token found");
+
+        const response = await axios.get(
+          `${
+            import.meta.env.VITE_GATEWAY_SERVICE_URL
+          }/doctor/findDiagnosis?q=${query}`,
+          { headers: { Authorization: `Bearer ${token.token}` } }
+        );
+        setResults(response.data);
+      } catch (error) {
+        console.error("Error fetching diagnosis records:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    const debounce = setTimeout(fetchData, 500); // Debounce to avoid excessive API calls
+    return () => clearTimeout(debounce);
+  }, [query]);
+
+  return (
+    <div className="p-4 max-w-md mx-auto">
+      <input
+        type="text"
+        placeholder="Search diagnosis..."
+        className="w-full p-2 border rounded"
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
+      />
+      {loading && <p>Loading...</p>}
+      <ul className="mt-2 border rounded divide-y">
+        {results.length > 0
+          ? results.map((diagnosis) => (
+              <li key={diagnosis._id} className="p-2">
+                <Button variant="link" onClick={() => onSelect(diagnosis)}>
+                  {diagnosis.name} (ID: {diagnosis.diagnosisId})
+                </Button>
+              </li>
+            ))
+          : query && !loading && <p className="p-2">No results found</p>}
+      </ul>
+    </div>
+  );
+};
+
+const DrugSearch = ({ onSelect }) => {
+  const [query, setQuery] = useState("");
+  const [results, setResults] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (!query) {
+      setResults([]);
+      return;
+    }
+
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const token = JSON.parse(localStorage.getItem("doctorInfo"));
+        if (!token) throw new Error("No token found");
+
+        const response = await axios.get(
+          `${
+            import.meta.env.VITE_GATEWAY_SERVICE_URL
+          }/doctor/findMedicines?q=${query}`,
+          { headers: { Authorization: `Bearer ${token.token}` } }
+        );
+        setResults(response.data);
+      } catch (error) {
+        console.error("Error fetching drug records:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    const debounce = setTimeout(fetchData, 500); // Debounce to avoid excessive API calls
+    return () => clearTimeout(debounce);
+  }, [query]);
+
+  return (
+    <div className="p-4 max-w-md mx-auto">
+      <input
+        type="text"
+        placeholder="Search drug..."
+        className="w-full p-2 border rounded"
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
+      />
+      {loading && <p>Loading...</p>}
+      <ul className="mt-2 border rounded divide-y">
+        {results.length > 0
+          ? results.map((drug) => (
+              <li key={drug._id} className="p-2">
+                <Button variant="link" onClick={() => onSelect(drug)}>
+                  {drug.drug} (LIMIT: {drug.limit})
+                </Button>
+              </li>
+            ))
+          : query && !loading && <p className="p-2">No results found</p>}
+      </ul>
+    </div>
+  );
+};
+
+
 const CreatePrescriptionPage = ({ onPrescriptionCreated }) => {
-  // const toast=useToast()
   const { isOpen, onOpen, onClose } = useDisclosure();
+   const toast = useToast();
   const [prescription, setPrescription] = useState({
     doctorAddress: "",
     patientId: "",
@@ -34,50 +156,34 @@ const CreatePrescriptionPage = ({ onPrescriptionCreated }) => {
     emergency: false,
     justification: "",
     privateKey: "",
+    diagnosisId: "",
   });
 
+  // Handle input change for prescription fields
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setPrescription({
-      ...prescription,
-      [name]: value,
-    });
+    setPrescription({ ...prescription, [name]: value });
   };
 
+  // Handle submitting prescription
   const handleSubmit = async () => {
     try {
       const token = JSON.parse(localStorage.getItem("doctorInfo"));
-      if (!token) {
-        alert("No authorization token found");
-        return;
-      }
+      if (!token) throw new Error("No token found");
 
       // API call to submit prescription
       const response = await axios.post(
         `${import.meta.env.VITE_GATEWAY_SERVICE_URL}/doctor/createPrescription`,
         prescription,
-        {
-          headers: { Authorization: `Bearer ${token.token}` },
-        }
+        { headers: { Authorization: `Bearer ${token.token}` } }
       );
 
-      // console.log(response.data.details)
-      console.log("Prescription submitted successfully:", response.data);
-      alert("Prescription submitted successfully!");
-      //  toast({
-      //    title: "Prescribed Successfully",
-      //    status: "success",
-      //    duration: 5000,
-      //    isClosable: true,
-      //    position: "bottom",
-      //  });
+      console.log("Prescription submitted:", response.data);
+      // alert("Prescription submitted successfully!");
+      toast({ title: "Prescription submitted successfully!", status: "success" });
 
-      // Notify parent component to refresh prescription list
-      if (onPrescriptionCreated) {
-        onPrescriptionCreated();
-      }
+      if (onPrescriptionCreated) onPrescriptionCreated();
 
-      // Reset form state and close modal
       setPrescription({
         doctorAddress: "",
         patientId: "",
@@ -88,27 +194,43 @@ const CreatePrescriptionPage = ({ onPrescriptionCreated }) => {
         emergency: false,
         justification: "",
         privateKey: "",
+        diagnosisId: "",
       });
+
       onClose();
     } catch (error) {
-      console.error("Error submitting prescription:", error.response.data.details);
-      // console.error("Error submitting prescription:", error);
-      
-
-      alert("Failed to submit prescription. Please try again.");
-      //  toast({
-      //    title: "Error occurred",
-      //    description: error.response.data.message,
-      //    status: "error",
-      //    duration: 5000,
-      //    isClosable: true,
-      //    position: "bottom",
-      //  });
+      console.error("Error submitting prescription:", error.response.data);
+      console.log("Error submitting prescription:", error.response.data.message.error);
+      // alert(
+      //   error.response.data.message.error
+      // );
+      toast({
+        title: error.response.data.message.error,
+        duration: 5000,
+        isClosable: true,
+        status: "error",
+        position: "top-right",
+        size: "xxxl",
+      });
     }
   };
 
+  // Handle diagnosis selection
+  const handleDiagnosisSelect = (diagnosis) => {
+    setPrescription({ ...prescription, diagnosisId: diagnosis.diagnosisId });
+  };
+
+  // Handle drug selection
+  const handleDrugSelect = (drug) => {
+    setPrescription({ ...prescription, drug: drug.drug });
+  };
+
   return (
-    <Center bg="black" h="50vh" color="white">
+    <Center
+      bg="linear-gradient(180deg, #000000, #1a1a40, rgb(14, 22, 95))"
+      h="50vh"
+      color="white"
+    >
       <Box
         bg="white"
         w="60%"
@@ -140,7 +262,6 @@ const CreatePrescriptionPage = ({ onPrescriptionCreated }) => {
               <FormControl mb={4}>
                 <FormLabel>Doctor's Ethereum Address</FormLabel>
                 <Input
-                  type="text"
                   name="doctorAddress"
                   value={prescription.doctorAddress}
                   onChange={handleChange}
@@ -161,19 +282,19 @@ const CreatePrescriptionPage = ({ onPrescriptionCreated }) => {
 
               <FormControl mb={4}>
                 <FormLabel>Drug</FormLabel>
+                <DrugSearch onSelect={handleDrugSelect} />
                 <Input
-                  type="text"
                   name="drug"
                   value={prescription.drug}
-                  onChange={handleChange}
-                  placeholder="Enter Drug Name"
+                  readOnly
+                  placeholder="Selected Drug"
+                  mt={2}
                 />
               </FormControl>
 
               <FormControl mb={4}>
                 <FormLabel>Dosage</FormLabel>
                 <Input
-                  type="text"
                   name="dosage"
                   value={prescription.dosage}
                   onChange={handleChange}
@@ -231,11 +352,23 @@ const CreatePrescriptionPage = ({ onPrescriptionCreated }) => {
               <FormControl mb={4}>
                 <FormLabel>Doctor's Private Key</FormLabel>
                 <Input
-                  type="text"
                   name="privateKey"
                   value={prescription.privateKey}
                   onChange={handleChange}
                   placeholder="Enter Private Key"
+                />
+              </FormControl>
+
+              {/* Diagnosis Autocomplete Dropdown */}
+              <FormControl mb={4}>
+                <FormLabel>Diagnosis</FormLabel>
+                <DiagnosisSearch onSelect={handleDiagnosisSelect} />
+                <Input
+                  name="diagnosisId"
+                  value={prescription.diagnosisId}
+                  readOnly
+                  placeholder="Selected Diagnosis ID"
+                  mt={2}
                 />
               </FormControl>
             </ModalBody>

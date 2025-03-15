@@ -91,7 +91,7 @@ const DoctorSignup = () => {
           ethereumWalletAddress,
           profileUrl,
           medicalLicenseId,
-          medicalLicenseCertificateUrl
+          medicalLicenseCertificateUrl,
         },
         config
       );
@@ -104,11 +104,26 @@ const DoctorSignup = () => {
         position: "bottom",
       });
 
+      // Clear the form
+      setFirstName("");
+      setLastName("");
+      setDateOfBirth("");
+      setGender("");
+      setContactNumber("");
+      setEmail("");
+      setPassword("");
+      setConfirmPassword("");
+      setSpecialization("");
+      setEthereumWalletAddress("");
+      setProfileUrl("");
+      setMedicalLicenseId("");
+      setMedicalLicenseCertificateUrl("");
+
       // localStorage.setItem("doctorInfo", JSON.stringify(data));
       setLoading(false);
-      // navigate("/doctor/dashboard");
-      console.log(data)
-      console.log("doctor signed up")
+      navigate("/doctor/dashboard");
+      console.log(data);
+      console.log("doctor signed up");
     } catch (error) {
       toast({
         title: "Error occurred",

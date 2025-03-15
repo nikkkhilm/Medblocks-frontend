@@ -19,7 +19,7 @@ const PharmacistSignup = () => {
   const [contactNumber, setContactNumber] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [profileUrl, setProfileUrl] = useState("");
   const [pharmacyLicenseId, setPharmacyLicenseId] = useState("");
   const [ethereumWalletAddress, setEthereumWalletAddress] = useState(""); // Corrected spelling of Ethereum Wallet Address
   const [loading, setLoading] = useState(false);
@@ -37,7 +37,7 @@ const PharmacistSignup = () => {
       !contactNumber ||
       !email ||
       !password ||
-      !confirmPassword ||
+      !profileUrl ||
       !pharmacyLicenseId ||
       !ethereumWalletAddress // Ensure Ethereum Wallet Address is checked
     ) {
@@ -52,17 +52,17 @@ const PharmacistSignup = () => {
       return;
     }
 
-    if (password !== confirmPassword) {
-      toast({
-        title: "Passwords do not match",
-        status: "error",
-        duration: 5000,
-        isClosable: true,
-        position: "bottom",
-      });
-      setLoading(false);
-      return;
-    }
+    // if (password !== confirmPassword) {
+    //   toast({
+    //     title: "Passwords do not match",
+    //     status: "error",
+    //     duration: 5000,
+    //     isClosable: true,
+    //     position: "bottom",
+    //   });
+    //   setLoading(false);
+    //   return;
+    // }
 
     try {
       const config = {
@@ -78,9 +78,10 @@ const PharmacistSignup = () => {
           lastName,
           dateOfBirth,
           gender,
-          contactNumer:contactNumber,
+          contactNumber,
           email,
           password,
+          profileUrl,
           pharmacyLicenseId,
           ethereumWalletAddress, // Corrected spelling of Ethereum Wallet Address
         },
@@ -100,7 +101,7 @@ const PharmacistSignup = () => {
       console.log("signed up");
       setLoading(false);
 
-      // navigate("/pharmacist/dashboard");
+      // navigate("/pharmacist-home");
     } catch (error) {
       toast({
         title: "Error occurred",
@@ -200,13 +201,24 @@ const PharmacistSignup = () => {
         />
       </FormControl>
 
-      <FormControl id="confirmPassword" isRequired>
+      {/* <FormControl id="confirmPassword" isRequired>
         <FormLabel fontSize={"lg"}>Confirm Password</FormLabel>
         <Input
           type="password"
           placeholder="Confirm Your Password"
           value={confirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}
+          fontSize={"lg"}
+          size={"lg"}
+        />
+      </FormControl> */}
+
+      <FormControl id="profileUrl" isRequired>
+        <FormLabel fontSize={"lg"}>Profile URL</FormLabel>
+        <Input
+          placeholder="Enter Your Profile url"
+          value={profileUrl}
+          onChange={(e) => setProfileUrl(e.target.value)}
           fontSize={"lg"}
           size={"lg"}
         />

@@ -1,12 +1,12 @@
 import React from "react";
 import { Box, Flex, Text, Button, Spacer, Image } from "@chakra-ui/react";
 import { useDisclosure } from "@chakra-ui/react";
-import logo from "../assets/logo.png"; // import your logo
+import logo from "../assets/logo.jpg"; // import your logo
 
 const Navbar = ({ role, onProfileOpen }) => {
   return (
     <Box
-      bg="#4267B2"
+      bg="linear-gradient(180deg, #000000, #1a1a40,rgb(14, 22, 95))"
       color="white"
       position="fixed"
       width="100%"
@@ -26,7 +26,7 @@ const Navbar = ({ role, onProfileOpen }) => {
         <Spacer />
 
         {/* Links */}
-        <Flex gap={36} ml="2vw">
+        {/* <Flex gap={36} ml="2vw">
           {["HOME", "PROFILE", "SEARCH"].map((item, index) => (
             <Text
               key={index}
@@ -37,13 +37,13 @@ const Navbar = ({ role, onProfileOpen }) => {
               {item}
             </Text>
           ))}
-        </Flex>
+        </Flex> */}
 
         <Spacer />
 
         {/* Profile Button (conditionally rendered) */}
         {role && (
-          <Button colorScheme="teal" onClick={onProfileOpen}>
+          <Button colorScheme="red" onClick={onProfileOpen}>
             View Profile
           </Button>
         )}

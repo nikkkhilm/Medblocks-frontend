@@ -21,8 +21,10 @@ import {
 } from "@chakra-ui/react";
 import axios from "axios";
 import Navbars from "./Navbars";
+import { useNavigate } from "react-router-dom";
 
 const PatientHome = () => {
+  const navigate=useNavigate();
   const {
     isOpen: isProfileOpen,
     onOpen: onProfileOpen,
@@ -38,13 +40,11 @@ const PatientHome = () => {
   const [patientDetails, setPatientDetails] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  // Safely retrieving token from localStorage
-  const token = JSON.parse(localStorage.getItem("userInfo"));
-
   useEffect(() => {
     const fetchPatientData = async () => {
       setLoading(true);
       try {
+        const token = JSON.parse(localStorage.getItem("userInfo"));
         if (!token) {
           console.error("Token not found.");
           return;
@@ -58,15 +58,11 @@ const PatientHome = () => {
             },
           }
         );
-
-        // Set patient details and prescriptions
+        console.log(data);
+        
         setPatientDetails(data);
-
-        // Flatten and sort prescriptions by date (most recent first)
-        const flattenedPrescriptions = data.prescriptionHistory
-          .map((item) => item.savedPrescription)
-          .sort((a, b) => new Date(b.time) - new Date(a.time));
-        setPrescriptions(flattenedPrescriptions);
+        setPrescriptions(data.prescriptionHistory);
+        console.log(patientDetails);  
       } catch (error) {
         console.error("Error fetching patient data:", error);
       } finally {
@@ -77,9 +73,9 @@ const PatientHome = () => {
     fetchPatientData();
   }, []);
 
-  const handlePrescriptionClick = (prescription) => {
-    setSelectedPrescription(prescription);
-    onPrescriptionOpen();
+  const handleLogout = () => {
+    localStorage.removeItem("userInfo"); // Remove stored user info
+    navigate("/"); // Redirect to landing page
   };
 
   return (
@@ -87,18 +83,6 @@ const PatientHome = () => {
       <Navbars role="pharmacist" onProfileOpen={onProfileOpen} />
       <Box p={6}>
         <Box mt={40}>
-          {/* UNDO IT WHEN DONE************************** */}
-          {/* <Text>
-          <strong>Name:</strong>{" "}
-          {`${patientDetails.firstName} ${patientDetails.lastName}`}
-        </Text> */}
-          {/* Profile Button at the top right */}
-          {/* <Flex justify="flex-end" mb={4}>
-            <Button colorScheme="blue" onClick={onProfileOpen}>
-              View Profile
-            </Button>
-          </Flex> */}
-
           <Modal isOpen={isProfileOpen} onClose={onProfileClose}>
             <ModalOverlay />
             <ModalContent>
@@ -107,21 +91,21 @@ const PatientHome = () => {
               <ModalBody>
                 {patientDetails ? (
                   <>
-                    <Text>
-                      <strong>Name:</strong>{" "}
-                      {`${patientDetails.firstName} ${patientDetails.lastName}`}
+                    <Text fontSize="lg">
+                      <strong>Name:</strong> {patientDetails.firstName}{" "}
+                      {patientDetails.lastName}
                     </Text>
-                    <Text>
+                    <Text fontSize="lg">
                       <strong>UniqueId:</strong> {patientDetails.uniqueId}
                     </Text>
-                    <Text>
+                    <Text fontSize="lg">
                       <strong>Email:</strong> {patientDetails.email}
                     </Text>
-                    <Text>
+                    <Text fontSize="lg">
                       <strong>Contact Number:</strong>{" "}
                       {patientDetails.contactNumber}
                     </Text>
-                    <Text>
+                    <Text fontSize="lg">
                       <strong>Date of Birth:</strong>{" "}
                       {new Date(
                         patientDetails.dateOfBirth
@@ -136,6 +120,9 @@ const PatientHome = () => {
                 <Button colorScheme="blue" onClick={onProfileClose}>
                   Close
                 </Button>
+                <Button colorScheme="red" ml={3} onClick={handleLogout}>
+                                  Logout
+                                </Button>
               </ModalFooter>
             </ModalContent>
           </Modal>
@@ -167,12 +154,15 @@ const PatientHome = () => {
                       borderWidth={1}
                       borderRadius="md"
                       boxShadow="md"
-                      bg={prescription.fulfilled ? "green.50" : "red.50"} // Conditional background color
+                      bg={prescription.fulfilled ? "green.50" : "red.50"}
                       cursor="pointer"
                       _hover={{
                         bg: prescription.fulfilled ? "green.100" : "red.100",
                       }}
-                      onClick={() => handlePrescriptionClick(prescription)}
+                      onClick={() => {
+                        setSelectedPrescription(prescription);
+                        onPrescriptionOpen();
+                      }}
                     >
                       <HStack justify="space-between">
                         <Text>
@@ -220,20 +210,37 @@ const PatientHome = () => {
                     {selectedPrescription.directions}
                   </Text>
                   <Text>
-                    <strong>Fulfilled:</strong>{" "}
-                    {selectedPrescription.fulfilled ? "YES" : "NO"}
+                    <strong>Fulfilled:</strong> {selectedPrescription.fulfilled ? "Yes" : "No"}
                   </Text>
                   <Text>
-                    <strong>Emergency:</strong>{" "}
-                    {selectedPrescription.emergency ? "YES" : "NO"}
+                    <strong>Emergency:</strong> {selectedPrescription.emergency ? "Yes" : "No"}
                   </Text>
                   <Text>
-                    <strong>Justification:</strong>{" "}
-                    {selectedPrescription.justification}
+                    <strong>Justification:</strong> {selectedPrescription.justification}
                   </Text>
                   <Text>
-                    <strong>Date:</strong>{" "}
-                    {new Date(selectedPrescription.time).toLocaleDateString()}
+                    <strong>Flagged:</strong> {selectedPrescription.flagged ? "Yes" : "No"}
+                  </Text>
+                  <Text>
+                    <strong>Time:</strong> {new Date(selectedPrescription.time).toLocaleString()}
+                  </Text>
+                  <Text>
+                    <strong>Diagnosis:</strong> {selectedPrescription.diagnosis.name}
+                  </Text>
+                  <Text>
+                    <strong>Symptoms:</strong> {selectedPrescription.diagnosis.symptoms.join(", ")}
+                  </Text>
+                  <Text>
+                    <strong>Category:</strong> {selectedPrescription.diagnosis.category}
+                  </Text>
+                  <Text>
+                    <strong>Severity:</strong> {selectedPrescription.diagnosis.severity}
+                  </Text>
+                  <Text>
+                    <strong>Diagnosis Id:</strong> {selectedPrescription.diagnosis.diagnosisId}
+                  </Text>
+                  <Text>
+                    <strong>Created At:</strong> {new Date(selectedPrescription.diagnosis.createdAt).toLocaleString()}
                   </Text>
                 </ModalBody>
                 <ModalFooter>

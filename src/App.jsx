@@ -10,6 +10,7 @@ import DoctorHome from "./pages/DoctorHome"; // Import the DoctorHome page
 import PatientHome from "./pages/PatientHome"; // Import the PatientHome page
 import PharmacistHome from "./pages/PharmacistHome"; // Import the PharmacistHome page
 import RegulatoryHome from "./pages/RegulatoryHome"; // Import the RegulatoryHome page
+import AnalyticsDashboard from "./pages/AnalyticsDashboard";
 
 function App() {
   return (
@@ -25,8 +26,10 @@ function App() {
         {/* Pharmacist Home */}
         <Route path="/regulatory-home" element={<RegulatoryHome />} />{" "}
         {/* Regulatory Home */}
+       <Route path="/analytics-dashboard" element={<AnalyticsDashboard />} />{" "}
+        {/* Analytics Dashboard */}
       </Routes>
-      
+
       <About />
       <Footer />
     </Router>

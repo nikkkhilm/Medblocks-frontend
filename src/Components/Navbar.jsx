@@ -1,11 +1,11 @@
 import React from "react";
 import { Box, Flex, Text, Image, Spacer } from "@chakra-ui/react";
-import logo from "../assets/logo.png"; // Import your logo
+import logo from "../assets/logo.jpg"; // Import your logo
 
 const Navbar = () => {
   return (
     <Box
-      bg=""
+      bg="linear-gradient(180deg, #000000, #1a1a40,rgb(14, 22, 95))"
       color="white"
       position="fixed"
       top="0"
@@ -18,7 +18,7 @@ const Navbar = () => {
       <Flex alignItems="center">
         {/* Logo Section */}
         <Flex alignItems="center">
-          <Image src={logo} alt="Logo" boxSize="50px" borderRadius="full" />
+          <Image src={logo} alt="Logo" boxSize="80px" borderRadius="full" />
           <Text fontSize="2xl" fontWeight="bold" ml={3}>
             BLOCKMEDS
           </Text>
@@ -27,13 +27,13 @@ const Navbar = () => {
         <Spacer />
 
         {/* Navigation Links */}
-        <Flex gap={12}>
+        {/* <Flex gap={12}>
           {["HOME", "ABOUT US"].map((item, index) => (
             <Text key={index} fontSize="lg" fontWeight="bold" cursor="pointer">
               {item}
             </Text>
           ))}
-        </Flex>
+        </Flex> */}
       </Flex>
     </Box>
   );

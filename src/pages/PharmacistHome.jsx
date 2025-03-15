@@ -18,12 +18,16 @@ import {
   useDisclosure,
   HStack,
   Center,
+  useToast
 } from "@chakra-ui/react";
 import axios from "axios";
 import Navbars from './Navbars'
-import ScrollingText from "../Components/ScrollingText";
+// import ScrollingText from "../Components/ScrollingText";
+import { useNavigate } from "react-router-dom";
 
 const PharmacistHome = () => {
+  const navigate = useNavigate();
+  const toast = useToast();
   const [pharmacistInfo, setPharmacistInfo] = useState(null);
   const [searchId, setSearchId] = useState("");
   const [prescriptions, setPrescriptions] = useState([]);
@@ -66,7 +70,7 @@ const PharmacistHome = () => {
 
         console.log(data)
         setPharmacistInfo(data);
-        console.log("pharmacistInfo",pharmacistInfo);
+        console.log("pharmacistInfo", pharmacistInfo);
       } catch (error) {
         console.error("Error fetching pharmacist info:", error);
       } finally {
@@ -85,17 +89,36 @@ const PharmacistHome = () => {
       if (!token) throw new Error("No token found");
 
       const { data } = await axios.get(
-        `${
-          import.meta.env.VITE_GATEWAY_SERVICE_URL
-        }/pharmacist/viewPrescription/${searchId}`,
+        `${import.meta.env.VITE_GATEWAY_SERVICE_URL}/pharmacist/viewPrescription/${searchId}`,
         { headers: { Authorization: `Bearer ${token.token}` } }
       );
       console.log(data)
-      setPrescriptions((prev) => [...prev, data]); // Add to list
-      console.log("prescriptions",prescriptions)
-      setSearchId(""); // Reset search field
+      if (data.prescription.fulfilled) {
+        toast({
+          title: "Error",
+          description: "This prescription is already fulfilled.",
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+        });
+        setSearchId(""); // Reset search field
+        setPrescriptions([]); // Clear previous search results
+      } else {
+        setPrescriptions((prev) => [...prev, data.prescription]); // Add to list
+        console.log("prescriptions", prescriptions)
+        setSearchId(""); // Reset search field
+      }
     } catch (error) {
       console.error("Error fetching prescription:", error);
+      toast({
+        title: "Error",
+        description: "Failed to fetch prescription.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+      setSearchId(""); // Reset search field
+      setPrescriptions([]); // Clear previous search results
     } finally {
       setLoadingSearch(false);
     }
@@ -111,21 +134,23 @@ const PharmacistHome = () => {
         prescriptionId: selectedPrescription.id,
         ...fulfillData,
       };
-      // console.log(payload)
-      // console.log()
-      // console.log(payload)
       console.log(payload)
 
       const { data } = await axios.post(
-        `${
-          import.meta.env.VITE_GATEWAY_SERVICE_URL
-        }/pharmacist/fulfillPrescription`,
+        `${import.meta.env.VITE_GATEWAY_SERVICE_URL}/pharmacist/fulfillPrescription`,
         payload,
         { headers: { Authorization: `Bearer ${token.token}` } }
       );
       console.log(data)
 
-      alert("Prescription fulfilled successfully!");
+      toast({
+        title: "Success",
+        description: "Prescription fulfilled successfully!",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+      });
+
       onFulfillClose();
       onDetailsClose();
 
@@ -135,20 +160,35 @@ const PharmacistHome = () => {
           (p) => p.prescriptionId !== selectedPrescription.prescriptionId
         )
       );
+
+      // Reset fulfill data
+      setFulfillData({
+        pharmacistAddress: "",
+        privateKey: "",
+      });
     } catch (error) {
       console.error("Error fulfilling prescription:", error);
+      toast({
+        title: "Error",
+        position: "top-right",
+        description: "Failed to fulfill prescription.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+      setSearchId(""); // Reset search field
+      setPrescriptions([]); // Clear previous search results
     }
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("pharmaInfo");
+    navigate("/")
   };
 
   return (
     <>
       <Navbars role="pharmacist" onProfileOpen={onProfileOpen} />
-      {/* <Box>
-        <ScrollingText
-          position="absolute"
-          top="100px"
-        />
-      </Box> */}
       <Box p={6}>
         <Box mt={40}>
           <Text
@@ -161,52 +201,6 @@ const PharmacistHome = () => {
           >
             PHARMACIST DASHBOARD
           </Text>
-
-          {/* Profile Button */}
-          {/* <Box textAlign={"right"}>
-            <Button colorScheme="teal" onClick={onProfileOpen} mb={4}>
-              View Profile
-            </Button>
-          </Box> */}
-
-          {/* Profile Modal */}
-          <Modal isOpen={isProfileOpen} onClose={onProfileClose}>
-            <ModalOverlay />
-            <ModalContent>
-              <ModalHeader>Pharmacist Profile</ModalHeader>
-              <ModalCloseButton />
-              <ModalBody>
-                {loadingProfile ? (
-                  <Spinner size="lg" />
-                ) : pharmacistInfo ? (
-                  <VStack spacing={4} align="stretch">
-                    <Text>
-                      <strong>Name:</strong>{" "}
-                      {`${pharmacistInfo.firstName} ${pharmacistInfo.lastName}`}
-                    </Text>
-                    <Text>
-                      <strong>Email:</strong> {pharmacistInfo.email}
-                    </Text>
-                    <Text>
-                      <strong>Contact Number:</strong>{" "}
-                      {pharmacistInfo.contactNumer}
-                    </Text>
-                    <Text>
-                      <strong>License ID:</strong>{" "}
-                      {pharmacistInfo.pharmacyLicenseId}
-                    </Text>
-                  </VStack>
-                ) : (
-                  <Text>No profile information available.</Text>
-                )}
-              </ModalBody>
-              <ModalFooter>
-                <Button colorScheme="blue" onClick={onProfileClose}>
-                  Close
-                </Button>
-              </ModalFooter>
-            </ModalContent>
-          </Modal>
 
           <Box display="flex" flexDir="column" alignItems="center">
             {/* Search Box */}
@@ -273,7 +267,13 @@ const PharmacistHome = () => {
                 <ModalCloseButton />
                 <ModalBody>
                   <Text>
-                    <strong>Patient ID:</strong> {selectedPrescription.id}
+                    <strong>Prescription ID:</strong> {selectedPrescription.id}
+                  </Text>
+                  <Text>
+                    <strong>Doctor:</strong> {selectedPrescription.doctor}
+                  </Text>
+                  <Text>
+                    <strong>Patient ID:</strong> {selectedPrescription.patientId}
                   </Text>
                   <Text>
                     <strong>Drug:</strong> {selectedPrescription.drug}
@@ -284,12 +284,17 @@ const PharmacistHome = () => {
                   <Text>
                     <strong>Quantity:</strong> {selectedPrescription.quantity}
                   </Text>
-                  {/* <Text>
-                <strong>Directions:</strong> {selectedPrescription.directions}
-              </Text> */}
                   <Text>
-                    <strong>Emergency:</strong>{" "}
-                    {selectedPrescription.emergency ? "YES" : "NO"}
+                    <strong>Justification:</strong> {selectedPrescription.justification}
+                  </Text>
+                  <Text color={selectedPrescription.fulfilled ? "green" : "red"}>
+                    <strong>Fulfilled:</strong> {selectedPrescription.fulfilled ? "YES" : "NO"}
+                  </Text>
+                  <Text>
+                    <strong>Emergency:</strong> {selectedPrescription.emergency ? "YES" : "NO"}
+                  </Text>
+                  <Text>
+                    <strong>Flagged:</strong> {selectedPrescription.flagged ? "YES" : "NO"}
                   </Text>
                 </ModalBody>
                 <ModalFooter>

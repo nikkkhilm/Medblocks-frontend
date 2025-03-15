@@ -17,7 +17,7 @@ const LandingPage = () => {
   useEffect(() => {
     gsap.to(textRef.current, {
       y: -50,
-      opacity: 0.2, // Smooth fade-out
+      // opacity: 0.2, // Smooth fade-out
       background: "linear-gradient(180deg, #000000, #1a1a40, #3a0ca3)", // Black to Deep Blue to Purple
       duration: 1.5,
       ease: "power3.out",
@@ -95,7 +95,7 @@ const LandingPage = () => {
           fontSize="8vw"
           fontWeight="bold"
           whiteSpace="nowrap"
-          textShadow="0 0 20px rgba(255, 255, 255, 0.8)" // Glowing text effect
+          textShadow="0 0 20px rgba(238, 127, 127, 0.8)" // Glowing text effect
         >
           <Typewriter
             text="BLOCKMEDS"
@@ -115,7 +115,7 @@ const LandingPage = () => {
         >
           {showTyping && (
             <Typewriter
-              text="ONE STOP SOLUTION TO DOCTOR SHOPPING"
+              text="ONE STOP SOLUTION TO SMART PRESCRIPTIONS"
               speed={80}
               typingDelay={500}
               cursor="|"
@@ -147,7 +147,7 @@ const LandingPage = () => {
         ref={loginRef}
         w="100vw"
         minH="80vh"
-        bg="black"
+        bg="linear-gradient(180deg, #000000, #1a1a40,rgb(14, 22, 95))"
         display="flex"
         alignItems="center"
         justifyContent="center"

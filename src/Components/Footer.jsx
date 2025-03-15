@@ -3,7 +3,13 @@ import { Box, Text, Flex, List, ListItem, Divider } from "@chakra-ui/react";
 
 const Footer = () => {
   return (
-    <Box bg="#4267B2" p={10} textAlign="center" color="white" mt={4}>
+    <Box
+      bg="linear-gradient(180deg, #000000, #1a1a40,rgb(14, 22, 95))"
+      p={10}
+      textAlign="center"
+      color="white"
+      mt={4}
+    >
       <Text fontWeight="semibold" mb={4}>
         @ all rights reserved
       </Text>

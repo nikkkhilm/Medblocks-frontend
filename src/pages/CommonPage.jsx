@@ -7,12 +7,13 @@ import PatientLogin from "./PatientLogin";
 import PatientSignup from "./PatientSignup";
 import PharmacistLogin from "./PharmacistLogin";
 import PharmacistSignup from "./PharmacistSignup";
+import RegulatoryBodyLogin from "./RegulatoryBodyLogin"; // Import RegulatoryBodyLogin component
 import doctorImage from "../assets/docimg.png";
 import patientImage from "../assets/patient-icon-1.png";
 import pharmacistImage from "../assets/pharmacist-icon-4.jpg";
+import regulatoryBodyImage from "../assets/Regulatory.jpg"; // Add an image for Regulatory Body
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-
 
 const CommonPage = () => {
   const [selectedRole, setSelectedRole] = useState(null);
@@ -86,11 +87,25 @@ const CommonPage = () => {
             </TabPanels>
           </Tabs>
         );
+      case "Regulatory Body":
+        return (
+          <Tabs variant="soft-rounded" textColor={"black"}>
+            <TabList mb="1em">
+              <Tab width="100%" fontSize="xl">
+                LOGIN
+              </Tab>
+            </TabList>
+            <TabPanels>
+              <TabPanel>
+                <RegulatoryBodyLogin />
+              </TabPanel>
+            </TabPanels>
+          </Tabs>
+        );
       default:
         return null;
     }
   };
-
 
   const settings = {
     dots: false,
@@ -106,15 +121,19 @@ const CommonPage = () => {
   };
 
   return (
-    <Container maxW="100%" backgroundColor={"black"} centerContent>
+    <Container
+      maxW="100%"
+      backgroundColor={
+        "linear-gradient(180deg, #000000, #1a1a40,rgb(14, 22, 95))"
+      }
+      centerContent
+    >
       <Box
         display="flex"
         justifyContent="center"
         bg="white"
         w="100%"
         p={2}
-        // m="40px 0 15px 0"
-        
         textAlign="center"
         backgroundColor="black"
       >
@@ -233,6 +252,44 @@ const CommonPage = () => {
                 Continue as Pharmacist
               </Button>
             </Box>
+
+            <Box
+              bg="white"
+              p={8}
+              borderRadius="lg"
+              boxShadow="lg"
+              textAlign="center"
+              width="100%"
+              height="500px" // Increase height
+              display="flex"
+              flexDirection="column"
+              justifyContent="center"
+              alignItems="center"
+              alignContent={"center"}
+            >
+              <Image
+                src={regulatoryBodyImage}
+                alt="Regulatory Body"
+                boxSize="250px"
+                mx="auto"
+              />
+              <Text
+                fontSize="xlg"
+                fontWeight={"bolder"}
+                mt={2}
+                color={"blue.600"}
+              >
+                REGULATORY BODY
+              </Text>
+              <Button
+                colorScheme="blue"
+                textColor={"white"}
+                onClick={() => handleRoleSelect("Regulatory Body")}
+                mt={4}
+              >
+                Continue as Regulatory Body
+              </Button>
+            </Box>
           </Slider>
         </Box>
       ) : (
@@ -242,11 +299,8 @@ const CommonPage = () => {
           borderRadius="lg"
           bg="white"
           maxW="800px"
-          // maxH="60%"
-          // width="100%"
           height="700px"
           overflowY="auto"
-          // margin="auto"
           mt={20}
           d="flex"
           justifyContent={"center"}

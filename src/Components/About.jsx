@@ -53,7 +53,7 @@ const About = () => {
         </Box>
       </Box>
 
-      {/* Testimonials Section */}
+      {/* Testimonials Section
       <Box textAlign="center" mx={20}>
         <Text
           fontSize="3xl"
@@ -63,10 +63,10 @@ const About = () => {
           textDecorationThickness="2px"
         >
           Testimonials
-        </Text>
-        <Flex justify="center" gap={8} wrap="wrap">
+        </Text> */}
+        {/* <Flex justify="center" gap={8} wrap="wrap"> */}
           {/* Testimonial Card 1 */}
-          <Box
+          {/* <Box
             bg="#898F9C17"
             p={8}
             maxW="300px"
@@ -82,10 +82,10 @@ const About = () => {
               possimus, maiores officiis minima asperiores harum repellat facere
               libero unde totam. Quasi, a beatae.
             </Text>
-          </Box>
+          </Box> */}
 
           {/* Testimonial Card 2 */}
-          <Box
+          {/* <Box
             bg="#898F9C17"
             p={8}
             maxW="300px"
@@ -101,10 +101,10 @@ const About = () => {
               possimus, maiores officiis minima asperiores harum repellat facere
               libero unde totam. Quasi, a beatae.
             </Text>
-          </Box>
+          </Box> */}
 
           {/* Testimonial Card 3 */}
-          <Box
+          {/* <Box
             bg="#898F9C17"
             p={8}
             maxW="300px"
@@ -120,9 +120,9 @@ const About = () => {
               possimus, maiores officiis minima asperiores harum repellat facere
               libero unde totam. Quasi, a beatae.
             </Text>
-          </Box>
-        </Flex>
-      </Box>
+          </Box> */}
+        {/* </Flex> */}
+      {/* </Box> */}
       
     </div>
   );

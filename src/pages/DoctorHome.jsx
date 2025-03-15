@@ -21,8 +21,11 @@ import axios from "axios";
 import CreatePrescriptionPage from "./CreatePrescriptionPage";
 import Search from "../Components/Search";
 import Navbars from "./Navbars";
+import { useNavigate } from "react-router-dom";
+
 
 const DoctorHome = () => {
+  const navigate = useNavigate(); 
   const toast = useToast();
   const {
     isOpen: isProfileOpen,
@@ -99,14 +102,14 @@ const DoctorHome = () => {
     onPrescriptionOpen();
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem("doctorInfo");
-    window.location.reload();
-  };
+   const handleLogout = () => {
+     localStorage.removeItem("doctorInfo"); // Remove stored user info
+     navigate("/"); // Redirect to landing page
+   };
 
   return (
     <>
-      <Navbars role="pharmacist" onProfileOpen={onProfileOpen} />
+      <Navbars role="doctor" onProfileOpen={onProfileOpen} />
       <Box p={6}>
         <Box mt={40}>
           <Text
